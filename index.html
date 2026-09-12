@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>script-andes-upd - Key System</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.85)), 
+                        url('https://assetdelivery.roblox.com/v1/asset?id=6184866078') no-repeat center center fixed;
+            background-size: cover;
+            color: #ffffff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        header {
+            margin-bottom: 25px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.8rem;
+            background: linear-gradient(45deg, #00ffcc, #ff007f);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(0, 255, 204, 0.4);
+            letter-spacing: 2px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 650px;
+            background: rgba(15, 15, 25, 0.9);
+            padding: 30px;
+            border-radius: 16px;
+            position: relative;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
+            overflow: hidden;
+        }
+
+        /* Hiệu ứng viền chuyển động */
+        .container::before {
+            content: '';
+            position: absolute;
+            top: -2px; left: -2px; right: -2px; bottom: -2px;
+            background: linear-gradient(45deg, #ff0055, #00ffff, #ff00ff, #00ffcc, #ff0055);
+            background-size: 400%;
+            z-index: -1;
+            border-radius: 18px;
+            animation: glowingBorder 8s linear infinite;
+        }
+
+        @keyframes glowingBorder {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Khung hình đen chính giữa */
+        .center-image-box {
+            width: 100%;
+            height: 160px;
+            background: #000000;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px dashed #333;
+            margin-bottom: 25px;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.8);
+        }
+
+        .center-image-box span {
+            color: #666;
+            font-size: 0.95rem;
+            font-style: italic;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #00ffcc;
+            font-size: 0.95rem;
+        }
+
+        .code-box {
+            background: #07070a;
+            padding: 12px;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            color: #00ffcc;
+            word-break: break-all;
+            white-space: pre-wrap;
+            max-height: 150px;
+            overflow-y: auto;
+            border: 1px dashed #444;
+            margin-bottom: 8px;
+        }
+
+        .btn-custom {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: opacity 0.3s, transform 0.2s;
+            box-shadow: 0 4px 15px rgba(255, 0, 127, 0.4);
+        }
+
+        .btn-create {
+            background: linear-gradient(45deg, #ff007f, #7f00ff);
+            margin-bottom: 15px;
+        }
+
+        .btn-create:hover, .btn-custom:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .btn-copy {
+            background: linear-gradient(45deg, #00ffcc, #007fff);
+            border: none;
+            border-radius: 6px;
+            padding: 8px 16px;
+            color: #000;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: opacity 0.3s;
+            box-shadow: 0 2px 8px rgba(0, 255, 204, 0.3);
+        }
+
+        .btn-copy:hover {
+            opacity: 0.9;
+        }
+
+        .copied-msg {
+            color: #00ffcc;
+            font-size: 0.85rem;
+            margin-left: 10px;
+        }
+
+        .result-section {
+            margin-top: 20px;
+            display: none;
+        }
+
+        .result-title {
+            font-size: 1rem;
+            color: #ff007f;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        #statusMsg {
+            text-align: center;
+            color: #ff007f;
+            font-weight: bold;
+            margin-top: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>script-andes-upd</h1>
+    </header>
+
+    <div class="container">
+        <!-- Phần hình đen chính giữa -->
+        <div class="center-image-box">
+            <span>[ Vùng Hình Ảnh / Khung Đen ]</span>
+        </div>
+
+        <!-- Khung Script chính -->
+        <div class="form-group">
+            <label>Script Hoạt Động:</label>
+            <div class="code-box" id="mainScript">loadstring(game:HttpGet("https://luauforge-antiraw.netlify.app/raw/anti-ai-encoding-andes-BugUhsv7k9hbA3nZebG0efi"))()</div>
+            <button class="btn-copy" onclick="copyText('mainScript', 'msg1')">Copy Script</button>
+            <span class="copied-msg" id="msg1" style="display: none;">Đã copy!</span>
+        </div>
+
+        <hr style="border: 0.5px solid #333; margin: 20px 0;">
+
+        <!-- Nút Tự động Get Key -->
+        <div class="form-group">
+            <button class="btn-custom btn-create" id="getKeyBtn" onclick="autoGetKey()">Tự Động Get Key Script</button>
+            <div id="statusMsg">Đang bỏ qua thời gian chờ, vui lòng đợi 5 giây...</div>
+        </div>
+
+        <!-- Phần hiển thị Key sau khi vượt qua -->
+        <div class="result-section" id="keyResultContainer">
+            <div class="result-title">Key Của Bạn:</div>
+            <div class="code-box" id="displayKey"></div>
+            <button class="btn-copy" onclick="copyText('displayKey', 'msg2')">Copy Key</button>
+            <span class="copied-msg" id="msg2" style="display: none;">Đã copy!</span>
+        </div>
+    </div>
+
+    <script>
+        function autoGetKey() {
+            const btn = document.getElementById('getKeyBtn');
+            const statusMsg = document.getElementById('statusMsg');
+            const resultContainer = document.getElementById('keyResultContainer');
+            
+            // Vô hiệu hóa nút và ẩn kết quả cũ
+            btn.disabled = true;
+            btn.style.opacity = '0.6';
+            resultContainer.style.display = 'none';
+            statusMsg.style.display = 'block';
+
+            let countdown = 5;
+            statusMsg.innerText = `Đang bỏ qua thời gian chờ... còn ${countdown} giây`;
+
+            let timer = setInterval(() => {
+                countdown--;
+                if (countdown > 0) {
+                    statusMsg.innerText = `Đang bỏ qua thời gian chờ... còn ${countdown} giây`;
+                } else {
+                    clearInterval(timer);
+                    statusMsg.style.display = 'none';
+                    btn.disabled = false;
+                    btn.style.opacity = '1';
+
+                    // Tạo key ngẫu nhiên
+                    let generatedKey = 'andes-key-' + Math.random().toString(36).substring(2, 10).toUpperCase() + '-' + Date.now().toString().slice(-4);
+                    
+                    document.getElementById('displayKey').innerText = generatedKey;
+                    resultContainer.style.display = 'block';
+                }
+            }, 1000);
+        }
+
+        function copyText(elementId, msgId) {
+            const textToCopy = document.getElementById(elementId).innerText;
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                const msg = document.getElementById(msgId);
+                msg.style.display = 'inline-block';
+                setTimeout(() => {
+                    msg.style.display = 'none';
+                }, 2000);
+            }).catch(err => {
+                alert('Không thể copy: ' + err);
+            });
+        }
+    </script>
+
+</body>
+</html>
